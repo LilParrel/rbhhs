@@ -1,0 +1,79 @@
+public class Node {
+private String label;
+private int weight = MAX_VALUE;
+private TreeMap<Node, Integer> links;
+private Node prev = null;
+
+public Node(String label) {
+this.label = label;
+  links = new TreeMap<>((a, b) -> a.label.compareTo(b.label));
+
+  
+  public void link(Node nodo2, Integer weight) {
+links.put(nodo2, weight);
+nodo2.links.put(this, weight);
+}
+  public int weightTo(Node n) {
+return weight + links.get(n);
+}
+
+public String getPath() {
+String weight = "";
+if (this.weight < MAX_VALUE)
+weight += this.weight;
+else
+weight = "inf";
+String out = "(" + label + "-" + weight + ")";
+if (prev != null)
+out = prev.getPath() + "-" + prev.links.get(this) + "->" + out;
+return out;
+}
+
+
+
+  public void dijkstra(String source) {
+    int sourceNode = Integer.parseInt(source);
+    initialize(sourceNode);
+
+    while (!priorityQueue.isEmpty()) {
+        Node current = priorityQueue.poll();
+        int currentNode = current.node;
+
+        if (visited[currentNode]) {
+            continue;
+        }
+        visited[currentNode] = true;
+
+        for (int i = 0; i < numNodes; i++) {
+            if (graph[currentNode][i] != 0) {
+                int newDistance = dist[currentNode] + graph[currentNode][i];
+                if (newDistance < dist[i]) {
+                    dist[i] = newDistance;
+                    predecessor.put(i, currentNode);
+                    priorityQueue.offer(new Node(i, newDistance));
+                }
+            }
+        }
+    }
+
+    // stampa delle distanze e dei percorsi dal nodo di partenza
+    System.out.println("Distances from source node " + source + ":");
+    for (int vertex = 0; vertex < numNodes; vertex++) {
+        System.out.println("Distance from " + source + " to " + vertex + ": " + dist[vertex]);
+        List<Integer> path = new ArrayList<>();
+        int current = vertex;
+        while (current != sourceNode) {
+            path.add(0, current);
+            current = predecessor.get(current);
+        }
+        path.add(0, sourceNode);
+        System.out.println("Path: " + path);
+    }
+}
+   
+   
+   
+   
+   
+   
+   
